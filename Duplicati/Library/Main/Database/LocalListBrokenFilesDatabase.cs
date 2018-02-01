@@ -91,6 +91,9 @@ SELECT ""A"".""Path"", ""B"".""Length"" FROM ""File"" A, ""Blockset"" B WHERE ""
             if (Transaction == null)
                 throw new Exception("This function cannot be called when not in a transaction, as it leaves the database in an inconsistent state");
 
+
+            Logging.Log.WriteMessage(string.Format("In RemoveMissingBlocks, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
+
             using (var deletecmd = m_connection.CreateCommand(Transaction))
             {
                 string temptransguid = Library.Utility.Utility.ByteArrayAsHexString(Guid.NewGuid().ToByteArray());
@@ -123,7 +126,12 @@ SELECT ""A"".""Path"", ""B"".""Length"" FROM ""File"" A, ""Blockset"" B WHERE ""
                     deletecmd.ExecuteNonQuery(string.Format(@"DROP TABLE IF EXISTS ""{0}"" ", volidstable));
                 }
                 catch { /* Ignore, will be deleted on close anyway. */ }
+
+                Logging.Log.WriteMessage(string.Format("Almost out of RemoveMissingBlocks, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
+
             }
+
+            Logging.Log.WriteMessage(string.Format("Returning from RemoveMissingBlocks, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
         }
 
         public long GetFilesetFileCount(long filesetid)

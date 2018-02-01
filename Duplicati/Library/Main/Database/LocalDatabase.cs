@@ -196,7 +196,10 @@ namespace Duplicati.Library.Main.Database
 
 
             if (!suppressCleanup && state == RemoteVolumeState.Deleted)
-                   RemoveRemoteVolume(name);
+               RemoveRemoteVolume(name);
+
+            Logging.Log.WriteMessage(string.Format("After UpdateRemoteVolume, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
+
         }
         
         public IEnumerable<KeyValuePair<long, DateTime>> FilesetTimes

@@ -79,10 +79,12 @@ namespace Duplicati.Library.Main.Operation
                     foreach (var f in missing)
                         db.UpdateRemoteVolume(f.Name, RemoteVolumeState.Deleting, f.Size, f.Hash);
 
+                    Logging.Log.WriteMessage(string.Format("After marking deleting, connection is: {0}", db.Connection == null ? "null" : db.Connection.State.ToString()), Logging.LogMessageType.Warning);
                     result.AddMessage(string.Format("Marked {0} remote files for deletion", missing.Count));
 
                     // Drop all content from tables
                     db.RemoveMissingBlocks(missing.Select(x => x.Name));
+                    Logging.Log.WriteMessage(string.Format("After RemoveMissingBlocks, connection is: {0}", db.Connection == null ? "null" : db.Connection.State.ToString()), Logging.LogMessageType.Warning);
                 }
                 brokensets = db.GetBrokenFilesets(options.Time, options.Version).ToArray();
             }
