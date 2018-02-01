@@ -57,6 +57,7 @@ SELECT ""A"".""Path"", ""B"".""Length"" FROM ""File"" A, ""Blockset"" B WHERE ""
 
         public IEnumerable<Tuple<DateTime, long, long>> GetBrokenFilesets(DateTime time, long[] versions)
         {
+            Logging.Log.WriteMessage(string.Format("In GetBrokenFilesets, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
             var query = string.Format(BROKEN_FILE_SETS, FOLDER_BLOCKSET_ID, SYMLINK_BLOCKSET_ID);
             var clause = GetFilelistWhereClause(time, versions);
             if (!string.IsNullOrWhiteSpace(clause.Item1))

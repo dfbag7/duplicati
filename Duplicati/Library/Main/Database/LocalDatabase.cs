@@ -203,10 +203,18 @@ namespace Duplicati.Library.Main.Database
         { 
             get 
             {
-                using(var cmd = m_connection.CreateCommand(Transaction))
-                using(var rd = cmd.ExecuteReader(@"SELECT ""ID"", ""Timestamp"" FROM ""Fileset"" ORDER BY ""Timestamp"" DESC"))
+                Logging.Log.WriteMessage(string.Format("In fileset times, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
+                using (var cmd = m_connection.CreateCommand(Transaction))
+                using (var rd = cmd.ExecuteReader(@"SELECT ""ID"", ""Timestamp"" FROM ""Fileset"" ORDER BY ""Timestamp"" DESC"))
+                {
+                    Logging.Log.WriteMessage(string.Format("In fileset times, started reader, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
+
                     while (rd.Read())
+                    {
+                        Logging.Log.WriteMessage(string.Format("In fileset times, returning result, connection is: {0}", m_connection == null ? "null" : m_connection.State.ToString()), Logging.LogMessageType.Warning);
                         yield return new KeyValuePair<long, DateTime>(rd.GetInt64(0), ParseFromEpochSeconds(rd.GetInt64(1)).ToLocalTime());
+                    }
+                }
             }
         }
 

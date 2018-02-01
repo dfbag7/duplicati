@@ -47,7 +47,9 @@ namespace Duplicati.Library.Main.Operation
         public static Tuple<DateTime, long, long>[] GetBrokenFilesetsFromRemote(string backendurl, BasicResults result, Database.LocalListBrokenFilesDatabase db, Options options, out List<Database.RemoteVolumeEntry> missing)
         {
             missing = null;
+            Logging.Log.WriteMessage(string.Format("In GetBrokenFilesetsFromRemote, connection is: {0}", db.Connection == null ? "null" : db.Connection.State.ToString()), Logging.LogMessageType.Warning);
             var brokensets = db.GetBrokenFilesets(options.Time, options.Version).ToArray();
+            Logging.Log.WriteMessage(string.Format("After GetBrokenFilesetsFromRemote, connection is: {0}", db.Connection == null ? "null" : db.Connection.State.ToString()), Logging.LogMessageType.Warning);
 
             if (brokensets.Length == 0)
             {
