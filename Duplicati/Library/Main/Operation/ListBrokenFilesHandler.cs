@@ -58,12 +58,16 @@ namespace Duplicati.Library.Main.Operation
 
                 result.AddMessage("No broken filesets found in database, checking for missing remote files");
 
+                Logging.Log.WriteMessage(string.Format("Before backend create, connection is: {0}", db.Connection == null ? "null" : db.Connection.State.ToString()), Logging.LogMessageType.Warning);
+
                 using (var backend = new BackendManager(backendurl, options, result.BackendWriter, db, result))
                 {
+                    Logging.Log.WriteMessage(string.Format("Before RemoteListAnalysis, connection is: {0}", db.Connection == null ? "null" : db.Connection.State.ToString()), Logging.LogMessageType.Warning);
                     var remotestate = FilelistProcessor.RemoteListAnalysis(backend, options, db, result.BackendWriter, null);
                     if (!remotestate.ParsedVolumes.Any())
                         throw new UserInformationException("No remote volumes were found, refusing purge");
 
+                    Logging.Log.WriteMessage(string.Format("After RemoteListAnalysis, connection is: {0}", db.Connection == null ? "null" : db.Connection.State.ToString()), Logging.LogMessageType.Warning);
                     missing = remotestate.MissingVolumes.ToList();
                     if (missing.Count == 0)
                     {
