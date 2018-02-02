@@ -1,5 +1,6 @@
 language: csharp
 solution: Duplicati.sln
+group: deprecated-2017Q4
 install:
   - nuget restore Duplicati.sln
   - nuget install NUnit.Runners -Version 3.5.0 -OutputDirectory testrunner
